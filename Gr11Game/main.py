@@ -2,7 +2,7 @@ from pygame import *
 from math import *
 from random import randint
 from pprint import pprint
-
+ahhhhhhhhh
 res, xBlock, yBlock = 64, 16, 12
 width, height = res * xBlock, res * yBlock
 screen = display.set_mode((width, height))
