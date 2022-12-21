@@ -268,7 +268,7 @@ def fileWriting(keys, mx, my):
     global fileList
     global drawTemp
     row, col = int(mx / res), int(my / res)
-    #print(row, col)
+    # print(row, col)
     for box in drawTemp:
         draw.rect(screen, box[1], box[0])
     if keys[K_r]:
@@ -287,14 +287,20 @@ def fileWriting(keys, mx, my):
     gridDisplay()
 
 
-def readFile(file):
-    myList = []
+def readFile(file, blocks):
+    returnList = []
     text = file.readlines()
     for i in range(len(text)):
-        myList.append(text[i].split(','))
-    for i in myList:
-        i.pop()
-    pprint(myList)
+        text[i] = text[i].split(",")
+        text[i].pop()
+    pprint(text)
+    for r in range(len(text)):
+        for c in range(len(text[r])):
+            for key in blocks.keys():
+                if text[r][c] == key:
+                    returnList.append(Object(r*res,c*res, res,res))
+    return returnList
+
 
 
 def main():
@@ -313,7 +319,10 @@ def main():
                              "down": (width / 2, res * 2),  # Same keys as doorways to make it easier
                              "left": (width - res * 2, height / 2),  # to link with both
                              "right": (res * 2, height / 2)}
-    readFile(open("Levels//new.txt", 'r'))
+    blocks = {"r": Object(0, 0, res, res)
+              }
+    roomObjects = readFile(open("Levels//new.txt", 'r'), blocks)
+    print(roomObjects)
     while running:
         bullCount += 1
         for evt in event.get():
@@ -325,6 +334,9 @@ def main():
         mb = mouse.get_pressed()
         screen.fill((0, 0, 0))
         #  ----- Drawing -----
+        for i in roomObjects:
+            print(i.x, i.y)
+            Object.drawObject(i)
         roomNum = doorwayCollision(player, doorways, roomNum, playerDoorwayLocation)
         for i in doorways.keys():
             Object.drawObject(doorways.get(i))
