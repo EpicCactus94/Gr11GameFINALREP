@@ -2,7 +2,7 @@ from pygame import *
 from math import *
 from random import randint
 from pprint import pprint
-ahhhhhhhhh
+
 res, xBlock, yBlock = 64, 16, 12
 width, height = res * xBlock, res * yBlock
 screen = display.set_mode((width, height))
@@ -268,7 +268,7 @@ def fileWriting(keys, mx, my):
     global fileList
     global drawTemp
     row, col = int(mx / res), int(my / res)
-    print(row, col)
+    #print(row, col)
     for box in drawTemp:
         draw.rect(screen, box[1], box[0])
     if keys[K_r]:
@@ -279,10 +279,22 @@ def fileWriting(keys, mx, my):
         newFile = open("Levels//new.txt", "w")
         pprint(fileList)
         for row in fileList:
-            newFile.write(f"{row} \n")
+            for col in row:
+                newFile.write(f"{col},")
+            newFile.write(f"\n")
         newFile.close()
         quit()
     gridDisplay()
+
+
+def readFile(file):
+    myList = []
+    text = file.readlines()
+    for i in range(len(text)):
+        myList.append(text[i].split(','))
+    for i in myList:
+        i.pop()
+    pprint(myList)
 
 
 def main():
@@ -301,6 +313,7 @@ def main():
                              "down": (width / 2, res * 2),  # Same keys as doorways to make it easier
                              "left": (width - res * 2, height / 2),  # to link with both
                              "right": (res * 2, height / 2)}
+    readFile(open("Levels//new.txt", 'r'))
     while running:
         bullCount += 1
         for evt in event.get():
@@ -311,7 +324,6 @@ def main():
         mx, my = mouse.get_pos()
         mb = mouse.get_pressed()
         screen.fill((0, 0, 0))
-
         #  ----- Drawing -----
         roomNum = doorwayCollision(player, doorways, roomNum, playerDoorwayLocation)
         for i in doorways.keys():
