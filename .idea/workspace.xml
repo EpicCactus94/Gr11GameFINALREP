@@ -24,7 +24,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Gr11Game/main.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Gr11Game/Pics" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Ali\Documents\GitHub\Gr11GameFINALREP\Gr11Game\Pics" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.main">
     <configuration name="Gr11GameFINALREP" type="PythonConfigurationType" factoryName="Python">

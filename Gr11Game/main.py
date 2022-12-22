@@ -3,7 +3,7 @@ from math import *
 from random import randint
 from pprint import pprint
 
-res, xBlock, yBlock = 64, 16, 12
+res, xBlock, yBlock = 72, 14, 10
 width, height = res * xBlock, res * yBlock
 screen = display.set_mode((width, height))
 # Creates a list with same dimensions as screen and all of its borders are marked
@@ -20,6 +20,7 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
 myClock = time.Clock()
+rocks = [transform.scale(image.load('Pics//rock0' + str(i) + ".png"), (res,res)) for i in range(1,2)]
 
 
 class Object:
@@ -28,10 +29,12 @@ class Object:
         self.y = y
         self.w = w
         self.h = h
+        #self.sprite = Surface(self.x, self.y, self.w, self.h)
         self.rect = Rect(x, y, w, h)
 
     def drawObject(self):
         draw.rect(screen, RED, (self.x, self.y, self.w, self.h))
+        #screen.blit(self.sprite)
 
 
 class Entity(Object):
@@ -136,12 +139,9 @@ class Bullets:
         # self.bullet_speed_slowed = bullet_speed_slowed
         # if self.mx - x == 0:
         #     return
-        self.angle = atan((self.my - self.y) / (self.mx - self.x))
+        self.angle = atan2((self.my - self.y), (self.mx - self.x))
         self.rise = sin(self.angle)
         self.run = cos(self.angle)
-        if self.mx < self.x:
-            self.rise = -sin(self.angle)
-            self.run = -cos(self.angle)
 
     def draw_bullets(self):
         draw.rect(screen, self.col, (self.x, self.y, self.width, self.height))
@@ -165,6 +165,11 @@ class Doorways(Object):
     def __init__(self, x, y, w, h):
         super().__init__(x, y, w, h)
 
+
+class Rock(Object):
+    def __init__(self, x, y, w, h):
+        super().__init__(x, y, w, h)
+        self.sprite = rocks[0]
 
 # ------------------------------------ Global functions ------------------------------------
 def generateRooms(roomList):
@@ -298,9 +303,8 @@ def readFile(file, blocks):
         for c in range(len(text[r])):
             for key in blocks.keys():
                 if text[r][c] == key:
-                    returnList.append(Object(r*res,c*res, res,res))
+                    returnList.append(Object(r * res, c * res, res, res))
     return returnList
-
 
 
 def main():
@@ -333,6 +337,7 @@ def main():
         mx, my = mouse.get_pos()
         mb = mouse.get_pressed()
         screen.fill((0, 0, 0))
+        screen.blit(rocks[0], (0,0,res,res))
         #  ----- Drawing -----
         for i in roomObjects:
             print(i.x, i.y)
