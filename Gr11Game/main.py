@@ -20,7 +20,8 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
 myClock = time.Clock()
-rocks = [transform.scale(image.load('Pics//rock0' + str(i) + ".png"), (res,res)) for i in range(1,2)]
+# rocks = [transform.scale(image.load('Pics//rock0' + str(i) + ".png"), (res, res)) for i in range(1, 2)]
+iceCorner = transform.scale(image.load("Pics//IceCorner01.png"), (res, res))
 
 
 class Object:
@@ -29,12 +30,12 @@ class Object:
         self.y = y
         self.w = w
         self.h = h
-        #self.sprite = Surface(self.x, self.y, self.w, self.h)
+        self.sprite = iceCorner
         self.rect = Rect(x, y, w, h)
 
     def drawObject(self):
         draw.rect(screen, RED, (self.x, self.y, self.w, self.h))
-        #screen.blit(self.sprite)
+        screen.blit(self.sprite, Rect(self.x, self.y, self.w, self.h))
 
 
 class Entity(Object):
@@ -171,9 +172,11 @@ class Rock(Object):
         super().__init__(x, y, w, h)
         self.sprite = rocks[0]
 
+
 # ------------------------------------ Global functions ------------------------------------
 def generateRooms(roomList):
     if len(roomList) > 10:
+        print(roomList)
         return roomList
     xCode, yCode = 0, 0
     if randint(2, 3) % 2 == 0:
@@ -261,6 +264,13 @@ def dist_collision(obj_1, obj_2, rad):
         return False
 
 
+def blitCorners():
+    screen.blit(iceCorner, (0, 0))
+    screen.blit(transform.rotate(iceCorner, 90), (0, height - res))
+    screen.blit(transform.rotate(iceCorner, 180), (width - res, height - res))
+    screen.blit(transform.rotate(iceCorner, 270), (width - res, 0))
+
+
 def gridDisplay():  # Temp to help create levels
     for i in range(0, height, res):
         draw.line(screen, RED, (0, i), (width, i))
@@ -337,7 +347,7 @@ def main():
         mx, my = mouse.get_pos()
         mb = mouse.get_pressed()
         screen.fill((0, 0, 0))
-        screen.blit(rocks[0], (0,0,res,res))
+        # screen.blit(rocks[0], (0, 0, res, res))
         #  ----- Drawing -----
         for i in roomObjects:
             print(i.x, i.y)
@@ -345,7 +355,7 @@ def main():
         roomNum = doorwayCollision(player, doorways, roomNum, playerDoorwayLocation)
         for i in doorways.keys():
             Object.drawObject(doorways.get(i))
-
+        blitCorners()
         player.drawPlayer()
         enemy.drawObject()
         enemy.moveShooterEnemy(player)
